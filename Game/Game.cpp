@@ -1,0 +1,90 @@
+#include "stdafx.h"
+#include "Game.h"
+#include "Player.h"
+#include "GameCamera.h"
+#include "BackGround.h"
+#include "GameUI.h"
+#include "Timer.h"
+#include "Score.h"
+#include "Seaofclouds.h"
+#include "Enemy.h"
+#include "GameOver.h"
+#include "BossHpBar.h"
+#include "EnemyBullet.h"
+
+bool Game::Start()
+{
+	player = NewGO<Player>(0, "player");
+
+	gameCamera = NewGO<GameCamera>(0, "gamecamra");
+
+	backGround = NewGO<BackGround>(0, "background");
+
+	gameUI = NewGO<GameUI>(0, "gameui");
+
+	timer = NewGO<Timer>(0, "timer");
+
+	score = NewGO<Score>(1, "score");   
+
+	NewGO<Seaofclouds>(0, "seaofclouds");
+	
+	return true;
+}
+
+void Game::Update()
+{
+	// ライフが0になり、最後の点滅が終わったら、ゲームオーバーにする
+	if (!isGameOver && player->GetLife() <= 0 && !player->IsInvincible())
+	{
+		isGameOver = true;
+		NewGO<GameOver>(3, "gameover");
+		StopBgm();
+	}
+}
+
+void Game::Render(RenderContext& rc)
+{
+	
+}
+
+
+// ゲームを終わらせる:ゲーム中のものを全部消して、最後に自分も消える
+void Game::Finish()
+{
+	DeleteGO(player);
+	DeleteGO(gameCamera);
+	DeleteGO(backGround);
+	DeleteGO(gameUI);
+	DeleteGO(timer);
+	DeleteGO(score);
+	DeleteGO(FindGO<Seaofclouds>("seaofclouds"));
+	StopBgm();
+
+	BossHpBar* hpBar = FindGO<BossHpBar>("bosshpbar");
+	if (hpBar != nullptr)
+	{
+		DeleteGO(hpBar);
+	}
+
+	for (Enemy* enemy : FindGOs<Enemy>("enemy"))
+	{
+		DeleteGO(enemy);
+	}
+
+	for (EnemyBullet* bullet : FindGOs<EnemyBullet>("enemybullet"))
+	{
+		DeleteGO(bullet);
+	}
+
+	DeleteGO(this);
+}
+
+// BGMを止める(すでに止まっていれば、何もしない)
+void Game::StopBgm()
+{
+	SoundSource* bgm = FindGO<SoundSource>("bgm");
+	if (bgm != nullptr)
+	{
+		DeleteGO(bgm);
+	}
+}

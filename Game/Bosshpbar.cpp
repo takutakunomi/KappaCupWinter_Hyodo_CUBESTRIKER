@@ -5,9 +5,9 @@
 namespace
 {
 	// ---- 絵 ----
-	const char* BACK_PATH = "Assets/sprite/hpbar/backgroundbar.DDS";   // 背景
-	const char* TRAIL_PATH = "Assets/sprite/hpbar/damagebar.DDS";      // ダメージの残像
-	const char* HP_PATH = "Assets/sprite/hpbar/hpbar.DDS";             // いまのHP
+	const char* BACK_PATH = "Assets/sprite/ingame/ui/hpbar/backgroundbar.DDS";   // 背景
+	const char* TRAIL_PATH = "Assets/sprite/ingame/ui/hpbar/damagebar.DDS";      // ダメージの残像
+	const char* HP_PATH = "Assets/sprite/ingame/ui/hpbar/hpbar.DDS";             // いまのHP
 
 	// ---- 大きさと位置(画面中央が原点) ----
 	const float BAR_WIDTH = 1000.0f;

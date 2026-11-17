@@ -15,12 +15,12 @@ bool GameUI::Start()
 		Vector3 heartPos(startX + heartInterval * i, startY, 0.0f);
 
 		// 残っているライフ(赤いハート)
-		heartRender[i].Init("Assets/sprite/life/full.DDS", heartSize, heartSize);   // 実際のパスに変更
+		heartRender[i].Init("Assets/sprite/ingame/ui/life/full.DDS", heartSize, heartSize);   // 実際のパスに変更
 		heartRender[i].SetPosition(heartPos);
 		heartRender[i].Update();
 
 		// 失ったライフ(黒いハート)。赤いハートと同じ位置に置く
-		emptyHeartRender[i].Init("Assets/sprite/life/empty.DDS", heartSize, heartSize);   // 実際のパスに変更
+		emptyHeartRender[i].Init("Assets/sprite/ingame/ui/life/empty.DDS", heartSize, heartSize);   // 実際のパスに変更
 		emptyHeartRender[i].SetPosition(heartPos);
 		emptyHeartRender[i].Update();
 	}
@@ -33,7 +33,7 @@ bool GameUI::Start()
 
 	for (int i = 0; i < MAX_BOMB; i++)
 	{
-		bombRender[i].Init("Assets/sprite/bomb/full.DDS", bombSize, bombSize);   // 実際のパスに変更
+		bombRender[i].Init("Assets/sprite/ingame/ui/bomb/full.DDS", bombSize, bombSize);   // 実際のパスに変更
 		bombRender[i].SetPosition(Vector3(bombStartX + bombInterval * i, bombStartY, 0.0f));
 		bombRender[i].Update();
 	}
@@ -44,7 +44,7 @@ bool GameUI::Start()
 	const float scoreX = -740.0f;   // 画像の中心
 	const float scoreY = 470.0f;
 
-	scoreRender.Init("Assets/sprite/score/score.DDS", scoreW, scoreH);
+	scoreRender.Init("Assets/sprite/ingame/ui/score/score.DDS", scoreW, scoreH);
 	scoreRender.SetPosition(Vector3(scoreX, scoreY, 0.0f));
 	scoreRender.Update();
 
@@ -54,7 +54,7 @@ bool GameUI::Start()
 	const float timeX = -740.0f;    // スコアと同じ中心X
 	const float timeY = 380.0f;     // スコア(470)の下に90ずらす
 
-	timeRender.Init("Assets/sprite/time/time.DDS", timeW, timeH);
+	timeRender.Init("Assets/sprite/ingame/ui/time/time.DDS", timeW, timeH);
 	timeRender.SetPosition(Vector3(timeX, timeY, 0.0f));
 	timeRender.Update();
 

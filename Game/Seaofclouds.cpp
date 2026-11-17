@@ -22,7 +22,7 @@ namespace
 
 	// ---- BGM ----
 	const int BGM_NUMBER = 0;                                     // 音の登録番号(ほかの音と重ならない番号にする)
-	const char* BGM_PATH = "Assets/music/sound/seaofclouds.wav";
+	const char* BGM_PATH = "Assets/music/bgm/ingame/seaofclouds/seaofclouds.wav";
 	const char* BGM_NAME = "bgm";                                 // 止めるときに探す名前
 	const float BGM_VOLUME = 0.5f;                                // 音量(0.0〜1.0)
 

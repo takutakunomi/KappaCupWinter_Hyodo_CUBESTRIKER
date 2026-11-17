@@ -19,7 +19,7 @@ Grainspike::Grainspike()
 
 const char* Grainspike::GetModelPath()
 {
-	return "Assets/modelData/seaofclouds/grainspike/grainspike.tkm";
+	return "Assets/modelData/enemy/seaofclouds/grainspike/grainspike.tkm";
 }
 
 EnemyCollider Grainspike::GetCollider()

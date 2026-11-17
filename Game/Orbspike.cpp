@@ -17,7 +17,7 @@ Orbspike::Orbspike()
 
 const char* Orbspike::GetModelPath()
 {
-	return "Assets/modelData/seaofclouds/orbspike/orbspike.tkm";   
+	return "Assets/modelData/enemy/seaofclouds/orbspike/orbspike.tkm";   
 }
 
 EnemyCollider Orbspike::GetCollider()

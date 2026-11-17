@@ -19,7 +19,7 @@ Pelletspike::Pelletspike()
 
 const char* Pelletspike::GetModelPath()
 {
-	return "Assets/modelData/seaofclouds/pelletspike/pelletspike.tkm";   
+	return "Assets/modelData/enemy/seaofclouds/pelletspike/pelletspike.tkm";   
 }
 
 EnemyCollider Pelletspike::GetCollider()

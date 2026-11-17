@@ -4,7 +4,7 @@
 
 namespace
 {
-	const char* MODEL_PATH = "Assets/modelData/seaofclouds/fauxoni/fauxoni.tkm";   // 実際のパスに変更
+	const char* MODEL_PATH = "Assets/modelData/enemy/seaofclouds/fauxoni/fauxoni.tkm";   // 実際のパスに変更
 	const float SIDE_LENGTH = 450.0f;   // 本体の一辺(当たり判定)
 	const int MAX_HP = 150;
 	const int SCORE = 5000;

@@ -4,7 +4,7 @@
 
 bool Title::Start()
 {
-	titleRender.Init("Assets/sprite/title/title.DDS", 1920.0f, 1080.0f);
+	titleRender.Init("Assets/sprite/outgame/title/title.DDS", 1920.0f, 1080.0f);
 	titleRender.Update();
 
 	return true;

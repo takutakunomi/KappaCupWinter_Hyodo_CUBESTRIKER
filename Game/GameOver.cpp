@@ -5,7 +5,7 @@
 
 namespace
 {
-	const char* SPRITE_PATH = "Assets/sprite/gameover/gameover.DDS";   // 実際のパスに変更
+	const char* SPRITE_PATH = "Assets/sprite/outgame/gameover/gameover.DDS";   // 実際のパスに変更
 	const float SCREEN_WIDTH = 1920.0f;
 	const float SCREEN_HEIGHT = 1080.0f;
 	const float INPUT_WAIT = 1.0f;   // この時間(秒)がたつまで、ボタンを受け付けない

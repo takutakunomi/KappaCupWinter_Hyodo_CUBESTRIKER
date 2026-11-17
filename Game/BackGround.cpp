@@ -7,13 +7,13 @@ namespace
 	const char* FADE_SHADER_PATH = "Assets/shader/unlitfade.fx";          // 上に加えて、奥にいくほど透明にするシェーダー(床用)
 
 	// ---- 空 ----
-	const char* SKY_MODEL_PATH = "Assets/modelData/stage/skywall.tkm";
+	const char* SKY_MODEL_PATH = "Assets/modelData/stage/seaofclouds/skywall.tkm";
 	const float SKY_Z = 3750.0f;            // 空を置く奥行き(敵のいる 1500 より奥)
 	const float SKY_ROTATION_Y = 180.0f;    // モデルの正面が奥を向いているので、回してカメラ側に向ける
 
 	// ---- 雲の床 ----
 	// 絵4枚ぶんの長さの板を1枚だけ使う(板のつなぎ目をなくすため)
-	const char* FLOOR_MODEL_PATH = "Assets/modelData/stage/cloudfloor_long.tkm";
+	const char* FLOOR_MODEL_PATH = "Assets/modelData/stage/seaofclouds/cloudfloor_long.tkm";
 	const float FLOOR_Y = -400.0f;          // 床の高さ(カメラの高さ 60 より下)
 	const float FLOOR_TILE_LENGTH = 2400.0f;    // 絵1枚ぶんの奥行き(板の絵の繰り返しの長さ)
 	const float FLOOR_CENTER_Z = 2400.0f;       // 板の中心の奥行き(画面の手前から空まで、床が途切れないように)

@@ -29,10 +29,10 @@ namespace
 
 	// 効果音
 	const int SHOT_SE_NUMBER = 1;                                  // 音の登録番号(BGMが0なので、1)
-	const char* SHOT_SE_PATH = "Assets/music/se/playershot.wav";
+	const char* SHOT_SE_PATH = "Assets/music/se/ingame/playershot.wav";
 	const float SHOT_SE_VOLUME = 0.4f;                             // 音量(0.0〜1.0)
 	const int DAMAGE_SE_NUMBER = 2;                                    // 音の登録番号(BGMが0、ショットが1なので、2)
-	const char* DAMAGE_SE_PATH = "Assets/music/se/playerdamage.wav";
+	const char* DAMAGE_SE_PATH = "Assets/music/se/ingame/playerdamage.wav";
 	const float DAMAGE_SE_VOLUME = 0.6f;                               // 音量(0.0〜1.0)
 
 	const float BULLET_SCALE_BASE = 600.0f; // 大きいほど弾が大きく見える
@@ -56,10 +56,10 @@ bool Player::Start()
 
 	for (int i = 0; i < MAX_BULLETS; i++)
 	{
-		bullets[i].render.Init("Assets/sprite/playerbullet/playerbullet.DDS", BULLET_SIZE, BULLET_SIZE);
+		bullets[i].render.Init("Assets/sprite/ingame/bullet/player/playerbullet.DDS", BULLET_SIZE, BULLET_SIZE);
 	}
 
-	reticleRender.Init("Assets/sprite/reticle/reticle.DDS", RETICLE_SIZE, RETICLE_SIZE);
+	reticleRender.Init("Assets/sprite/ingame/ui/reticle/reticle.DDS", RETICLE_SIZE, RETICLE_SIZE);
 
 	g_soundEngine->ResistWaveFileBank(SHOT_SE_NUMBER, SHOT_SE_PATH);
 	g_soundEngine->ResistWaveFileBank(DAMAGE_SE_NUMBER, DAMAGE_SE_PATH);

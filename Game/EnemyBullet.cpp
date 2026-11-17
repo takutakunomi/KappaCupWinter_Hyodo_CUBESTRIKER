@@ -15,16 +15,16 @@ namespace
 	// enum EnBulletType と同じ順番で書く
 	const BulletInfo BULLET_INFO[enBullet_Count] =
 	{
-		{ "Assets/sprite/enemybullet/seaofclouds/orbspike/orb_medium.DDS",       64.0f, 20.0f },   // 中玉・赤
-		{ "Assets/sprite/enemybullet/seaofclouds/grainspike/grain_rice.DDS",     48.0f, 14.0f },   // 米弾・オレンジ
-		{ "Assets/sprite/enemybullet/seaofclouds/pelletspike/pellet_small.DDS",  32.0f, 10.0f },   // 小玉・紫
-		{ "Assets/sprite/enemybullet/seaofclouds/purplebaron/purple_medium.DDS", 64.0f, 20.0f },   // 中玉・紫
-		{ "Assets/sprite/enemybullet/seaofclouds/purplebaron/purple_rice.DDS",   48.0f, 14.0f },   // 米弾・紫
-		{ "Assets/sprite/enemybullet/seaofclouds/purplebaron/purple_small.DDS",  32.0f, 10.0f },   // 小玉・紫
-		{ "Assets/sprite/enemybullet/seaofclouds/fauxoni/fake_large.DDS",        96.0f, 30.0f },   // 大玉
-		{ "Assets/sprite/enemybullet/seaofclouds/fauxoni/fake_medium.DDS",       64.0f, 20.0f },   // 中玉
-		{ "Assets/sprite/enemybullet/seaofclouds/fauxoni/fake_rice.DDS",         48.0f, 14.0f },   // 米弾
-		{ "Assets/sprite/enemybullet/seaofclouds/fauxoni/fake_small.DDS",        32.0f, 10.0f },   // 小玉
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/orbspike/orb_medium.DDS",       64.0f, 20.0f },   // 中玉・赤
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/grainspike/grain_rice.DDS",     48.0f, 14.0f },   // 米弾・オレンジ
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/pelletspike/pellet_small.DDS",  32.0f, 10.0f },   // 小玉・紫
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/purplebaron/purple_medium.DDS", 64.0f, 20.0f },   // 中玉・紫
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/purplebaron/purple_rice.DDS",   48.0f, 14.0f },   // 米弾・紫
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/purplebaron/purple_small.DDS",  32.0f, 10.0f },   // 小玉・紫
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/fauxoni/fake_large.DDS",        96.0f, 30.0f },   // 大玉
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/fauxoni/fake_medium.DDS",       64.0f, 20.0f },   // 中玉
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/fauxoni/fake_rice.DDS",         48.0f, 14.0f },   // 米弾
+		{ "Assets/sprite/ingame/bullet/enemy/seaofclouds/fauxoni/fake_small.DDS",        32.0f, 10.0f },   // 小玉
 	};
 
 	const float LIFE_TIME = 8.0f;          // 弾が消えるまでの時間(秒)

@@ -7,6 +7,9 @@
 #include "PurpleBaron.h"
 #include "FauxOni.h"
 #include "BossHpBar.h"
+#include "Game.h"
+#include "GameClear.h"
+#include "EnemyBullet.h"
 
 namespace
 {
@@ -25,6 +28,8 @@ namespace
 	const char* BGM_PATH = "Assets/music/bgm/ingame/seaofclouds/seaofclouds.wav";
 	const char* BGM_NAME = "bgm";                                 // 止めるときに探す名前
 	const float BGM_VOLUME = 0.5f;                                // 音量(0.0〜1.0)
+
+	const float CLEAR_WAIT = 2.0f;   // ボスを倒してから、クリア画面を出すまでの時間(秒)
 
 	// ---- 中ボスの前の出現予定(ステージ開始からの時間) ----
 	// 書き方: { 時間, 敵の種類, X, Y }
@@ -69,6 +74,15 @@ namespace
 	// 表の数(配列全体の大きさ ÷ 1件の大きさ)
 	const int BEFORE_MIDBOSS_COUNT = sizeof(BEFORE_MIDBOSS) / sizeof(BEFORE_MIDBOSS[0]);
 	const int AFTER_MIDBOSS_COUNT = sizeof(AFTER_MIDBOSS) / sizeof(AFTER_MIDBOSS[0]);
+
+	// 画面に残っている敵の弾を、全部消す
+	void DeleteAllEnemyBullets()
+	{
+		for (EnemyBullet* bullet : FindGOs<EnemyBullet>("enemybullet"))
+		{
+			DeleteGO(bullet);
+		}
+	}
 }
 
 bool Seaofclouds::Start()
@@ -129,11 +143,13 @@ void Seaofclouds::Update()
 		{
 			boss = nullptr;
 			phase = enPhase_Clear;
+			phaseTimer = 0.0f;         // クリア画面を出すまでの待ち時間を数え直す
+			DeleteAllEnemyBullets();   // 残っている敵の弾を消す
 		}
 		break;
 
 	case enPhase_Clear:
-		// ステージクリアのあとの処理は、まだ作っていない
+		UpdateClear();
 		break;
 	}
 }
@@ -205,4 +221,28 @@ void Seaofclouds::StartAfterMidBoss()
 	phase = enPhase_AfterMidBoss;
 	phaseTimer = 0.0f;
 	nextIndex = 0;
+}
+
+// ボス撃破から少し待って、クリア画面を出す
+void Seaofclouds::UpdateClear()
+{
+	if (isClearShown)
+	{
+		return;
+	}
+
+	if (phaseTimer < CLEAR_WAIT)
+	{
+		return;
+	}
+
+	isClearShown = true;
+
+	Game* game = FindGO<Game>("game");
+	if (game != nullptr)
+	{
+		game->StopBgm();
+	}
+
+	NewGO<GameClear>(3, "gameclear");
 }

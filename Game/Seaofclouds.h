@@ -47,6 +47,7 @@ private:
 	void SpawnBoss();                                            // ボスを出す
 	void CreateHpBar(Enemy* target);                             // 体力バーを出す
 	void StartBgm();                                             // 道中BGMを流す
+	void UpdateClear();                                          // 少し待って、クリア画面を出す
 
 private:
 	EnPhase phase = enPhase_BeforeMidBoss;
@@ -54,4 +55,5 @@ private:
 	int nextIndex = 0;         // 次に出す予定の番号
 	Enemy* midBoss = nullptr;  // 出している中ボス
 	Enemy* boss = nullptr;     // 出しているボス
+	bool isClearShown = false; // クリア画面を出したか
 };

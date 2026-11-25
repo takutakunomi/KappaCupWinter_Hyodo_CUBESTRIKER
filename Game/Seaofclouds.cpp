@@ -8,7 +8,6 @@
 #include "FauxOni.h"
 #include "BossHpBar.h"
 #include "Game.h"
-#include "GameClear.h"
 #include "EnemyBullet.h"
 
 namespace
@@ -29,7 +28,7 @@ namespace
 	const char* BGM_NAME = "bgm";                                 // 止めるときに探す名前
 	const float BGM_VOLUME = 0.5f;                                // 音量(0.0〜1.0)
 
-	const float CLEAR_WAIT = 2.0f;   // ボスを倒してから、クリア画面を出すまでの時間(秒)
+	const float CLEAR_WAIT = 2.0f;   // ボスを倒してから、次の面へ進むまでの時間(秒)
 
 	// ---- 中ボスの前の出現予定(ステージ開始からの時間) ----
 	// 書き方: { 時間, 敵の種類, X, Y }
@@ -91,7 +90,7 @@ bool Seaofclouds::Start()
 	return true;
 }
 
-// 道中BGMを、ループで流す(止めるのは Game::Finish)
+// 道中BGMを、ループで流す(止めるのは Game::ClearStage)
 void Seaofclouds::StartBgm()
 {
 	g_soundEngine->ResistWaveFileBank(BGM_NUMBER, BGM_PATH);   // 同じ番号は2回目から何もしないので、やり直しても大丈夫
@@ -223,10 +222,10 @@ void Seaofclouds::StartAfterMidBoss()
 	nextIndex = 0;
 }
 
-// ボス撃破から少し待って、クリア画面を出す
+// ボス撃破から少し待って、次の面へ進む(最後の面なら、Game がゲームクリアにする)
 void Seaofclouds::UpdateClear()
 {
-	if (isClearShown)
+	if (isStageFinished)
 	{
 		return;
 	}
@@ -236,13 +235,11 @@ void Seaofclouds::UpdateClear()
 		return;
 	}
 
-	isClearShown = true;
+	isStageFinished = true;
 
 	Game* game = FindGO<Game>("game");
 	if (game != nullptr)
 	{
-		game->StopBgm();
+		game->GoToNextStage();
 	}
-
-	NewGO<GameClear>(3, "gameclear");
 }

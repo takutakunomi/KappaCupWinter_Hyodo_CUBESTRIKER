@@ -6,14 +6,25 @@ namespace
 	const char* UNLIT_SHADER_PATH = "Assets/shader/unlit.fx";             // ライトを使わず、絵の色をそのまま出すシェーダー
 	const char* FADE_SHADER_PATH = "Assets/shader/unlitfade.fx";          // 上に加えて、奥にいくほど透明にするシェーダー(床用)
 
+	// ---- 面ごとの空と床のモデル(EnStage と同じ順番で書く) ----
+	struct StageModel
+	{
+		const char* skyPath;     // 空(動かない)
+		const char* floorPath;   // 雲の床(流れる。絵4枚ぶんの長さの板1枚)
+	};
+
+	const StageModel STAGE_MODELS[enStage_Count] =
+	{
+		{ "Assets/modelData/stage/seaofclouds/skywall.tkm", "Assets/modelData/stage/seaofclouds/cloudfloor_long.tkm" },   // 1面
+		{ "Assets/modelData/stage/sunsetsky/skywall.tkm",      "Assets/modelData/stage/sunsetsky/cloudfloorlong.tkm" },        // 2面
+	};
+
 	// ---- 空 ----
-	const char* SKY_MODEL_PATH = "Assets/modelData/stage/seaofclouds/skywall.tkm";
 	const float SKY_Z = 3750.0f;            // 空を置く奥行き(敵のいる 1500 より奥)
 	const float SKY_ROTATION_Y = 180.0f;    // モデルの正面が奥を向いているので、回してカメラ側に向ける
 
 	// ---- 雲の床 ----
 	// 絵4枚ぶんの長さの板を1枚だけ使う(板のつなぎ目をなくすため)
-	const char* FLOOR_MODEL_PATH = "Assets/modelData/stage/seaofclouds/cloudfloor_long.tkm";
 	const float FLOOR_Y = -400.0f;          // 床の高さ(カメラの高さ 60 より下)
 	const float FLOOR_TILE_LENGTH = 2400.0f;    // 絵1枚ぶんの奥行き(板の絵の繰り返しの長さ)
 	const float FLOOR_CENTER_Z = 2400.0f;       // 板の中心の奥行き(画面の手前から空まで、床が途切れないように)
@@ -64,7 +75,7 @@ void BackGround::InitSky()
 	Quaternion rotation;
 	rotation.SetRotationDegY(SKY_ROTATION_Y);
 
-	InitUnlit(skyRender, SKY_MODEL_PATH, UNLIT_SHADER_PATH, AlphaBlendMode_None);
+	InitUnlit(skyRender, STAGE_MODELS[stage].skyPath, UNLIT_SHADER_PATH, AlphaBlendMode_None);
 	skyRender.SetPosition(Vector3(0.0f, 0.0f, SKY_Z));
 	skyRender.SetRotation(rotation);
 	skyRender.Update();
@@ -72,7 +83,7 @@ void BackGround::InitSky()
 
 void BackGround::InitFloor()
 {
-	InitUnlit(floorRender, FLOOR_MODEL_PATH, FADE_SHADER_PATH, AlphaBlendMode_Trans);
+	InitUnlit(floorRender, STAGE_MODELS[stage].floorPath, FADE_SHADER_PATH, AlphaBlendMode_Trans);
 	UpdateFloor();
 }
 

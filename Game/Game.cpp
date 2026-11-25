@@ -7,8 +7,10 @@
 #include "Timer.h"
 #include "Score.h"
 #include "Seaofclouds.h"
+#include "Sunsetsky.h"
 #include "Enemy.h"
 #include "GameOver.h"
+#include "GameClear.h"
 #include "BossHpBar.h"
 #include "EnemyBullet.h"
 
@@ -18,16 +20,16 @@ bool Game::Start()
 
 	gameCamera = NewGO<GameCamera>(0, "gamecamra");
 
-	backGround = NewGO<BackGround>(0, "background");
+	CreateBackGround();
 
 	gameUI = NewGO<GameUI>(0, "gameui");
 
 	timer = NewGO<Timer>(0, "timer");
 
-	score = NewGO<Score>(1, "score");   
+	score = NewGO<Score>(1, "score");
 
-	NewGO<Seaofclouds>(0, "seaofclouds");
-	
+	CreateStageObject();
+
 	return true;
 }
 
@@ -44,7 +46,7 @@ void Game::Update()
 
 void Game::Render(RenderContext& rc)
 {
-	
+
 }
 
 
@@ -53,12 +55,64 @@ void Game::Finish()
 {
 	DeleteGO(player);
 	DeleteGO(gameCamera);
-	DeleteGO(backGround);
 	DeleteGO(gameUI);
 	DeleteGO(timer);
 	DeleteGO(score);
-	DeleteGO(FindGO<Seaofclouds>("seaofclouds"));
+	ClearStage();
+
+	DeleteGO(this);
+}
+
+// いまの面を片づけて、次の面へ進む。最後の面だったら、ゲームクリアにする
+void Game::GoToNextStage()
+{
+	bool isLastStage = (stage + 1 >= enStage_Count);
+	if (isLastStage)
+	{
+		StopBgm();
+		NewGO<GameClear>(3, "gameclear");
+		return;
+	}
+
+	ClearStage();
+	stage = static_cast<EnStage>(stage + 1);
+	CreateBackGround();
+	CreateStageObject();
+}
+
+// いまの面の背景を作る
+void Game::CreateBackGround()
+{
+	backGround = NewGO<BackGround>(0, "background");
+	backGround->SetStage(stage);   // Start が動く前(NewGO の直後)に、面を決める
+}
+
+// いまの面の進行役(敵を出す係)を作る
+void Game::CreateStageObject()
+{
+	switch (stage)
+	{
+	case enStage_Seaofclouds:
+		stageObject = NewGO<Seaofclouds>(0, "seaofclouds");
+		break;
+	case enStage_Sunsetsky:
+		stageObject = NewGO<Sunsetsky>(0, "sunsetsky");
+		break;
+	}
+}
+
+// いまの面のものを、全部消す(プレイヤーなど、面をまたいで続くものは消さない)
+void Game::ClearStage()
+{
 	StopBgm();
+
+	DeleteGO(backGround);
+
+	if (stageObject != nullptr)
+	{
+		DeleteGO(stageObject);
+		stageObject = nullptr;
+	}
 
 	BossHpBar* hpBar = FindGO<BossHpBar>("bosshpbar");
 	if (hpBar != nullptr)
@@ -75,8 +129,6 @@ void Game::Finish()
 	{
 		DeleteGO(bullet);
 	}
-
-	DeleteGO(this);
 }
 
 // BGMを止める(すでに止まっていれば、何もしない)

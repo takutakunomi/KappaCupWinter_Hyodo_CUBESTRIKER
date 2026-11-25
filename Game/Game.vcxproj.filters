@@ -111,6 +111,7 @@
     <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Bulletpattern.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="Sunsetsky.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -169,5 +170,7 @@
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Bulletpattern.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="Sunsetsky.h" />
+    <ClInclude Include="stage.h" />
   </ItemGroup>
 </Project>

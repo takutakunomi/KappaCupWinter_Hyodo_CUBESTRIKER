@@ -36,6 +36,7 @@ namespace
 	const float MENU_START_X = -1500.0f;    // 流れ始める位置(ボタンが画面の左の外に隠れる位置)
 	const float MENU_SLIDE_TIME = 0.9f;     // 1つのボタンが中央に着くまでの時間(秒)
 	const float MENU_DELAY = 0.2f;          // 次のボタンが流れ始めるまでの遅れ(秒)
+	const float MENU_TOTAL_TIME = MENU_SLIDE_TIME + MENU_DELAY * (Title::MENU_COUNT - 1);   // 全部のボタンが着くまでの時間(秒)
 
 	const float STICK_THRESHOLD = 0.5f;     // スティックを、これ以上倒したら「動かした」とする
 
@@ -110,6 +111,12 @@ void Title::Update()
 	case enState_Menu:
 		UpdateMenu();
 		break;
+	case enState_MenuOut:
+		UpdateMenuOut();
+		break;
+	case enState_LogoIn:
+		UpdateLogoIn();
+		break;
 	}
 }
 
@@ -132,9 +139,7 @@ void Title::UpdateLogo()
 void Title::UpdateLogoOut()
 {
 	leaveTimer = min(leaveTimer + g_gameTime->GetFrameDeltaTime(), LEAVE_TIME);
-
-	float eased = EaseIn(leaveTimer / LEAVE_TIME);
-	SetLogoPosition(leaveStartX + (LEAVE_END_X - leaveStartX) * eased);
+	SetLogoLeavePosition();
 
 	if (leaveTimer >= LEAVE_TIME)
 	{
@@ -145,17 +150,11 @@ void Title::UpdateLogoOut()
 // ボタンを、上から順に少しずつ遅らせて、左から中央へ流す
 void Title::UpdateMenuIn()
 {
-	menuTimer += g_gameTime->GetFrameDeltaTime();
-
-	for (int i = 0; i < MENU_COUNT; i++)
-	{
-		float t = Clamp01((menuTimer - MENU_DELAY * i) / MENU_SLIDE_TIME);
-		SetMenuPosition(i, MENU_START_X * (1.0f - EaseOut(t)));
-	}
+	menuTimer = min(menuTimer + g_gameTime->GetFrameDeltaTime(), MENU_TOTAL_TIME);
+	SetMenuSlidePosition();
 
 	// 最後のボタンが着いたら、選べるようにする
-	float totalTime = MENU_SLIDE_TIME + MENU_DELAY * (MENU_COUNT - 1);
-	if (menuTimer >= totalTime)
+	if (menuTimer >= MENU_TOTAL_TIME)
 	{
 		state = enState_Menu;
 	}
@@ -178,6 +177,42 @@ void Title::UpdateMenu()
 			StartGame();
 		}
 		// selected == 1(操作説明)は、まだ作っていない
+	}
+
+	// Bボタンで、ロゴの画面へ戻る
+	if (g_pad[0]->IsTrigger(enButtonB))
+	{
+		state = enState_MenuOut;
+	}
+}
+
+// ボタンが流れてきた動きを、逆戻しにする(あとから来たボタンが、先に戻る)
+void Title::UpdateMenuOut()
+{
+	menuTimer = max(menuTimer - g_gameTime->GetFrameDeltaTime(), 0.0f);
+	SetMenuSlidePosition();
+
+	UpdateMenuGlow();   // 光は消えていく
+
+	// 全部戻ったら、ロゴを戻し始める
+	if (menuTimer <= 0.0f)
+	{
+		state = enState_LogoIn;
+		selected = 0;   // 次に開いたときは、ゲームスタートから
+	}
+}
+
+// ロゴが出ていった動きを、逆戻しにする。戻りきったら、またAボタン待ち
+void Title::UpdateLogoIn()
+{
+	leaveTimer = max(leaveTimer - g_gameTime->GetFrameDeltaTime(), 0.0f);
+	SetLogoLeavePosition();
+
+	UpdateBlink();
+
+	if (leaveTimer <= 0.0f)
+	{
+		state = enState_Logo;
 	}
 }
 
@@ -213,6 +248,13 @@ void Title::UpdateBlink()
 	logoGlowRender.Update();
 }
 
+// ロゴを、leaveTimer に合わせた位置に置く(0 で出ていく前、LEAVE_TIME で右の外)
+void Title::SetLogoLeavePosition()
+{
+	float eased = EaseIn(leaveTimer / LEAVE_TIME);
+	SetLogoPosition(leaveStartX + (LEAVE_END_X - leaveStartX) * eased);
+}
+
 // 光なしと光ありのロゴを、同じ位置に動かす
 void Title::SetLogoPosition(float x)
 {
@@ -235,6 +277,16 @@ void Title::SetMenuPosition(int index, float x)
 	menuRender[index].Update();
 	menuGlowRender[index].SetPosition(position);
 	menuGlowRender[index].Update();
+}
+
+// ボタンを、menuTimer に合わせた位置に置く(0 で左の外、MENU_TOTAL_TIME で全部中央)
+void Title::SetMenuSlidePosition()
+{
+	for (int i = 0; i < MENU_COUNT; i++)
+	{
+		float t = Clamp01((menuTimer - MENU_DELAY * i) / MENU_SLIDE_TIME);
+		SetMenuPosition(i, MENU_START_X * (1.0f - EaseOut(t)));
+	}
 }
 
 // 選んでいるボタンだけ光らせる。濃さを少しずつ目標に近づけて、切り替わりをなめらかにする
@@ -299,7 +351,7 @@ void Title::Render(RenderContext& rc)
 {
 	titleRender.Draw(rc);
 
-	if (state == enState_Logo || state == enState_LogoOut)
+	if (state == enState_Logo || state == enState_LogoOut || state == enState_LogoIn)
 	{
 		logoRender.Draw(rc);
 		logoGlowRender.Draw(rc);   // 光ありを、光なしの上に重ねる

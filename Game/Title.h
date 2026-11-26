@@ -5,6 +5,7 @@
 //   2. Aボタンで、ロゴが右へ出ていく
 //   3. 「ゲームスタート」「操作説明」のボタンが左から流れてくる
 //   4. ボタンを選んで、Aボタンで決める
+//   5. Bボタンで、3 → 2 を逆戻しにして、ロゴの画面へ戻る
 class Title : public IGameObject
 {
 public:
@@ -26,6 +27,8 @@ private:
 		enState_LogoOut,   // ロゴが右へ出ていく
 		enState_MenuIn,    // ボタンが左から流れてくる
 		enState_Menu,      // ボタンを選ぶ
+		enState_MenuOut,   // ボタンが左へ戻っていく(流れてきた動きの逆戻し)
+		enState_LogoIn,    // ロゴが右から戻ってくる(出ていった動きの逆戻し)
 	};
 
 	// 段階ごとの更新
@@ -33,14 +36,18 @@ private:
 	void UpdateLogoOut();
 	void UpdateMenuIn();
 	void UpdateMenu();
+	void UpdateMenuOut();
+	void UpdateLogoIn();
 
 	// ロゴ
 	void UpdateSlide();   // ロゴを、左の外から中央へ滑り込ませる
 	void UpdateBlink();   // ロゴの光を、脈打つように点滅させる
 	void SetLogoPosition(float x);
+	void SetLogoLeavePosition();   // leaveTimer に合わせて、ロゴを出ていく動きの位置に置く
 
 	// ボタン
 	void SetMenuPosition(int index, float x);
+	void SetMenuSlidePosition();   // menuTimer に合わせて、ボタンを流れてくる動きの位置に置く
 	void UpdateMenuGlow();   // 選んでいるボタンだけ光らせる(切り替わりはなめらか)
 	int ReadMenuMove();      // 上に1つ:-1  下に1つ:+1  動かない:0
 

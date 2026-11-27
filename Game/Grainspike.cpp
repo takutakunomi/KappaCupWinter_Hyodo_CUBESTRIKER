@@ -13,7 +13,7 @@ namespace
 
 Grainspike::Grainspike()
 {
-	maxHp = 1;
+	maxHp = 10;
 	score = 120;
 }
 

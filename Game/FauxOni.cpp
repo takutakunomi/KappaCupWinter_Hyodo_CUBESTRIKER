@@ -6,7 +6,7 @@ namespace
 {
 	const char* MODEL_PATH = "Assets/modelData/enemy/seaofclouds/fauxoni/fauxoni.tkm";   // 実際のパスに変更
 	const float SIDE_LENGTH = 450.0f;   // 本体の一辺(当たり判定)
-	const int MAX_HP = 150;
+	const int MAX_HP = 1500;
 	const int SCORE = 5000;
 	const float STAY_TIME = 9999.0f;    // 倒されるまで去らない
 
@@ -79,16 +79,13 @@ EnemyCollider FauxOni::GetCollider()
 	return MakeBoxCollider(SIDE_LENGTH);
 }
 
-// 進んだ段階の数だけ、上の弾から順に撃つ(中玉 → +米玉 → +小玉 → +大玉)
+// いまの段階の弾だけを撃つ(1段階目:中玉 → 2段階目:米玉 → 3段階目:小玉 → 4段階目:大玉)
 void FauxOni::OnUpdate()
 {
-	int activeCount = CalcPhaseIndex(GetHp(), GetMaxHp()) + 1;
+	int phase = CalcPhaseIndex(GetHp(), GetMaxHp());
 
-	for (int i = 0; i < activeCount; i++)
+	if (CountUpTimer(shotTimers[phase], SHOT_SETTINGS[phase].interval))
 	{
-		if (CountUpTimer(shotTimers[i], SHOT_SETTINGS[i].interval))
-		{
-			Shoot(position, SHOT_SETTINGS[i]);
-		}
+		Shoot(position, SHOT_SETTINGS[phase]);
 	}
 }

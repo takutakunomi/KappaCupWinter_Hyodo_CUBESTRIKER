@@ -74,7 +74,7 @@ protected:
 	Vector3 position = Vector3::Zero;
 	int maxHp = 3;              // 最大HP
 	int score = 100;            // 撃破したときの得点
-	float lifeTime = 10.0f;     // 出現してから去るまでの時間(秒)
+	float lifeTime = 0.0f;      // 出現してから去るまでの時間(秒)。0 なら、倒されるまで去らない
 
 private:
 	// ---- 撃破 ----

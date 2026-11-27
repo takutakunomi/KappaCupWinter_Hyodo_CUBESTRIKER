@@ -13,13 +13,13 @@ namespace
 
 Pelletspike::Pelletspike()
 {
-	maxHp = 1;
+	maxHp = 10;
 	score = 120;
 }
 
 const char* Pelletspike::GetModelPath()
 {
-	return "Assets/modelData/enemy/seaofclouds/pelletspike/pelletspike.tkm";   
+	return "Assets/modelData/enemy/seaofclouds/pelletspike/pelletspike.tkm";
 }
 
 EnemyCollider Pelletspike::GetCollider()

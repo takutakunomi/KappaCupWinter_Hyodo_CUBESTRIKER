@@ -48,7 +48,7 @@ void Enemy::Update()
 
 	// 決まった時間がたったら、去る
 	elapsedTime += g_gameTime->GetFrameDeltaTime();
-	if (elapsedTime >= lifeTime)
+	if (lifeTime > 0.0f && elapsedTime >= lifeTime)
 	{
 		DeleteGO(this);
 		return;

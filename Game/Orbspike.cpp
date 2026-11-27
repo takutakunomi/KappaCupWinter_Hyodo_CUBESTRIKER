@@ -11,13 +11,13 @@ namespace
 
 Orbspike::Orbspike()
 {
-	maxHp = 1;
+	maxHp = 10;
 	score = 100;
 }
 
 const char* Orbspike::GetModelPath()
 {
-	return "Assets/modelData/enemy/seaofclouds/orbspike/orbspike.tkm";   
+	return "Assets/modelData/enemy/seaofclouds/orbspike/orbspike.tkm";
 }
 
 EnemyCollider Orbspike::GetCollider()

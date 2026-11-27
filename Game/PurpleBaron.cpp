@@ -6,7 +6,7 @@ namespace
 {
 	const char* MODEL_PATH = "Assets/modelData/enemy/seaofclouds/purplebaron/purplebaron.tkm";
 	const float SIDE_LENGTH = 300.0f;   // 本体の一辺(当たり判定)
-	const int MAX_HP = 40;
+	const int MAX_HP = 400;
 	const int SCORE = 1000;
 	const float STAY_TIME = 9999.0f;    // 倒されるまで去らない
 
@@ -81,13 +81,10 @@ EnemyCollider PurpleBaron::GetCollider()
 // 進んだ段階の数だけ、上の弾から順に撃つ(中玉 → 中玉と米玉 → 中玉と米玉と小玉)
 void PurpleBaron::OnUpdate()
 {
-	int activeCount = CalcPhaseIndex(GetHp(), GetMaxHp()) + 1;
+	int phase = CalcPhaseIndex(GetHp(), GetMaxHp());   // いまの段階の弾だけを撃つ
 
-	for (int i = 0; i < activeCount; i++)
+	if (CountUpTimer(shotTimers[phase], SHOT_SETTINGS[phase].interval))
 	{
-		if (CountUpTimer(shotTimers[i], SHOT_SETTINGS[i].interval))
-		{
-			Shoot(position, SHOT_SETTINGS[i]);
-		}
+		Shoot(position, SHOT_SETTINGS[phase]);
 	}
 }

@@ -14,11 +14,11 @@ namespace
 {
 	const float ENEMY_Z = 1500.0f;      // 敵がいる奥行き(固定)
 
-	const float MIDBOSS_TIME = 50.0f;   // 中ボスが出る時間(ステージ開始から)
+	const float MIDBOSS_TIME = 15.0f;   // 中ボスが出る時間(ステージ開始から)
 	const float MIDBOSS_X = 0.0f;       // 中ボスの出現位置
 	const float MIDBOSS_Y = 60.0f;
 
-	const float BOSS_TIME = 30.0f;      // ボスが出る時間(中ボス撃破から)
+	const float BOSS_TIME = 9.0f;      // ボスが出る時間(中ボス撃破から)
 	const float BOSS_X = 0.0f;          // ボスの出現位置
 	const float BOSS_Y = 60.0f;
 
@@ -34,40 +34,25 @@ namespace
 	// 書き方: { 時間, 敵の種類, X, Y }
 	const SpawnData BEFORE_MIDBOSS[] =
 	{
-		{ 3.0f, enType_Orbspike,   -450.0f,   60.0f },
-		{ 8.0f, enType_Orbspike,      0.0f,  240.0f },
-		{ 13.0f, enType_Orbspike,    450.0f,   60.0f },
+		{ 3.0f, enType_Orbspike,      0.0f,   60.0f },   // 真ん中
 
-		{ 20.0f, enType_Grainspike,  450.0f,  240.0f },
-		{ 25.0f, enType_Grainspike,    0.0f, -120.0f },
-		{ 30.0f, enType_Grainspike, -450.0f,  240.0f },
+		{ 6.0f, enType_Grainspike,    0.0f,   60.0f },   // 真ん中
 
-		{ 35.0f, enType_Orbspike,   -450.0f,  240.0f },
-		{ 35.0f, enType_Grainspike,  450.0f,  240.0f },
+		{ 9.0f, enType_Pelletspike,   0.0f,   60.0f },   // 真ん中
 
-		{ 40.0f, enType_Orbspike,      0.0f, -120.0f },
-		{ 40.0f, enType_Grainspike, -450.0f,   60.0f },
-
-		{ 45.0f, enType_Orbspike,    450.0f, -120.0f },
-		{ 45.0f, enType_Grainspike,    0.0f,  240.0f },
-
-		// 50秒:中ボス(0, 60)は、まだ作っていない
+		{ 12.0f, enType_Orbspike,  -450.0f,   60.0f },   // 左
+		{ 12.0f, enType_Orbspike,   450.0f,   60.0f },   // 右
 	};
 
 	// ---- 中ボス撃破後の出現予定(中ボスを倒してからの時間) ----
 	const SpawnData AFTER_MIDBOSS[] =
 	{
-		{ 3.0f, enType_Orbspike,   -450.0f,   60.0f },
-		{ 8.0f, enType_Grainspike,  450.0f,  240.0f },
-		{ 13.0f, enType_Pelletspike,   0.0f, -120.0f },
+		{ 3.0f, enType_Grainspike, -450.0f,   60.0f },   // 左
+		{ 3.0f, enType_Grainspike,  450.0f,   60.0f },   // 右
 
-		{ 18.0f, enType_Orbspike,   -450.0f,  240.0f },
-		{ 18.0f, enType_Grainspike,  450.0f,  240.0f },
-
-		{ 23.0f, enType_Pelletspike,   0.0f,  240.0f },
-		{ 23.0f, enType_Orbspike,      0.0f, -120.0f },
-
-		// 30秒後:ボス(三つ目大王)(0, 60)は、まだ作っていない
+		{ 6.0f, enType_Pelletspike,    0.0f,   60.0f },   // 真ん中
+		{ 6.0f, enType_Orbspike,    -450.0f,   60.0f },   // 左
+		{ 6.0f, enType_Orbspike,     450.0f,   60.0f },   // 右
 	};
 
 	// 表の数(配列全体の大きさ ÷ 1件の大きさ)
@@ -81,6 +66,19 @@ namespace
 		{
 			DeleteGO(bullet);
 		}
+	}
+
+	// 雑魚(や中ボス・ボス)が、まだ生きているか
+	bool IsAnyEnemyAlive()
+	{
+		for (Enemy* enemy : FindGOs<Enemy>("enemy"))
+		{
+			if (enemy->IsAlive())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
 
@@ -103,7 +101,12 @@ void Seaofclouds::StartBgm()
 
 void Seaofclouds::Update()
 {
-	phaseTimer += g_gameTime->GetFrameDeltaTime();
+	// 雑魚が残っているあいだは、出現の時間を止める(倒し切るまで、次へ進まない)
+	bool isWaitingDefeat = (phase == enPhase_BeforeMidBoss || phase == enPhase_AfterMidBoss) && IsAnyEnemyAlive();
+	if (!isWaitingDefeat)
+	{
+		phaseTimer += g_gameTime->GetFrameDeltaTime();
+	}
 
 	switch (phase)
 	{
